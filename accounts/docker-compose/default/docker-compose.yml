@@ -1,0 +1,141 @@
+version: "3.8"
+
+services:
+
+  zipkin:
+    image: openzipkin/zipkin
+    mem_limit: 700m
+    ports:
+      - "9411:9411"
+    networks:
+      - easybank  
+  
+  configserver:
+    image: sidsol7/bankapp:configserver
+    mem_limit: 700m
+    ports:
+      - "8071:8071"
+    networks:
+      - easybank    
+    depends_on:
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+          
+  eurekaserver:
+    image: sidsol7/bankapp:eurekaserver
+    mem_limit: 700m
+    ports:
+      - "8070:8070"
+    networks:
+      - easybank
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/          
+  
+  accounts:
+    image: sidsol7/bankapp:accounts
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - easybank
+    depends_on:    
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 25s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      #SPRING_APPLICATION_JSON: '{"eureka":{"client":{"serviceUrl":{"defaultZone":"eurekaserver:8070/eureka/"}}}}'
+      
+  loans:
+    image: sidsol7/bankapp:loans
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - easybank
+    depends_on:    
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 25s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      #SPRING_APPLICATION_JSON: '{"eureka":{"client":{"serviceUrl":{"defaultZone":"eurekaserver:8070/eureka/"}}}}'
+      
+  cards:
+    image: sidsol7/bankapp:cards
+    mem_limit: 700m
+    ports:
+      - "9070:9070"
+    networks:
+      - easybank
+    depends_on:    
+      - configserver
+      - eurekaserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 25s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+      #SPRING_APPLICATION_JSON: '{"eureka":{"client":{"serviceUrl":{"defaultZone":"eurekaserver:8070/eureka/"}}}}'
+  
+  gatewayserver:
+    image: sidsol7/bankapp:gatewayserver
+    mem_limit: 700m
+    ports:
+      - "8072:8072"
+    networks:
+      - easybank
+    depends_on:
+      - configserver
+      - eurekaserver
+      - accounts
+      - loans
+      - cards
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 60s
+        max_attempts: 3
+        window: 150s
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka/
+      SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
+                
+networks:
+  easybank:

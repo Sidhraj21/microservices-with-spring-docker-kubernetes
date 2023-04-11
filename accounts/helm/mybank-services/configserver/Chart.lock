@@ -1,0 +1,6 @@
+dependencies:
+- name: mybank-common
+  repository: file://../../mybank-common
+  version: 0.1.0
+digest: sha256:ad6f0b57ca0ee683f4df12dd6964eb45a9736c0a0a1c4d778d14df249670548a
+generated: "2023-04-11T14:44:12.804268459+05:30"

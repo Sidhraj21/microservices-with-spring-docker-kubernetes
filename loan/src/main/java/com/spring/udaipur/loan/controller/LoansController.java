@@ -52,7 +52,7 @@ public class LoansController {
 	}
 	
 	@PostMapping(value="/myLoans")
-	public List<Loans> getLoansDetails(@RequestHeader("eazybank-correlation-id") String correlationid,@RequestBody Customer customer) {
+	public List<Loans> getLoansDetails(@RequestHeader("my-bank-correlation-id") String correlationid,@RequestBody Customer customer) {
 		logger.info("getLoansDetails() method started");
 		List<Loans> loans = loanRepo.findByCustomerIdOrderByStartDtDesc(customer.getCustomerId());
 		logger.info("getLoansDetails() method ended");
