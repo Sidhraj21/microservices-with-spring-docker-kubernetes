@@ -1,0 +1,25 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: accounts-deployment
+deploymentLabel: accounts
+
+replicaCount: 2
+
+image:
+  repository: sidsol7/bankapp
+  tag: accounts
+
+containerPort: 8080
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+##based on these boolean values the envirnmental values defined in the deployment.yaml file inside mybank-common files values will be used  
+config_enabled: true
+zipkin_enabled: true
+profile_enabled: true
+eureka_enabled: true
+keycloak_enabled: false

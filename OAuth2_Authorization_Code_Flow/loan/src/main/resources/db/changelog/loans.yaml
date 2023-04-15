@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: createTable-Loans
+      author: sidhraj
+      changes:
+      - createTable:
+         tableName: Loans
+         columns:
+         - column:
+             name: loan_number 
+             type: int
+             #nullable: false
+             autoIncrement: true
+             incrementBy: 1
+             constraints:  
+                primaryKey:  true
+         - column:
+              name: customer_id
+              type: int
+              #nullable: false
+         - column:
+              name: start_dt
+              type: date		    
+              #nullable: false
+         - column:
+              name: loan_type
+              type: varchar(100)
+              #nullable: false
+         - column:
+              name: total_loan
+              type: int
+              #nullable: false
+         - column:
+              name: amount_paid
+              type: int
+              #nullable: false	 
+         - column:
+              name: outstanding_amount
+              type: int
+              #nullable: false
+         - column:
+              name: create_dt
+              type: date
+              defaultValue: null

@@ -1,0 +1,5 @@
+databaseChangeLog:
+ - include:
+      file: db/changelog/loans.yaml
+ - include:
+      file: db/changelog/loans_seed_data.yaml

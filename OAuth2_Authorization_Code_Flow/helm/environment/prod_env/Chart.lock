@@ -1,0 +1,27 @@
+dependencies:
+- name: mybank-common
+  repository: file://../../mybank-common
+  version: 0.1.0
+- name: zipkin
+  repository: file://../../mybank-services/zipkin
+  version: 0.1.0
+- name: configserver
+  repository: file://../../mybank-services/configserver
+  version: 0.1.0
+- name: eurekaserver
+  repository: file://../../mybank-services/eurekaserver
+  version: 0.1.0
+- name: accounts
+  repository: file://../../mybank-services/accounts
+  version: 0.1.0
+- name: cards
+  repository: file://../../mybank-services/cards
+  version: 0.1.0
+- name: loans
+  repository: file://../../mybank-services/loans
+  version: 0.1.0
+- name: gatewayserver
+  repository: file://../../mybank-services/gatewayserver
+  version: 0.1.0
+digest: sha256:97b0e9448c9b25c74c3f41f4a7d2c523f81bb054e8a12cc99dc45fa96c191f1e
+generated: "2023-04-11T15:14:02.958174046+05:30"
